@@ -16,7 +16,20 @@
     <style>
         .pro-feature { opacity: 0.6; cursor: not-allowed; }
         .pro-feature > * { pointer-events: none; }
-        
+
+        /* Empêche l'icône et le titre de passer sur deux lignes */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .section-title i { flex-shrink: 0; }
+
+        .med-row .btn-remove-med {
+            flex-shrink: 0;
+        }
+
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
@@ -36,435 +49,176 @@
         }
     </style>
 </head>
-<body data-bs-theme="light">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top no-print">
-        <div class="container-fluid position-relative">
-            <a class="navbar-brand fw-bold" href="dashboard.html">
-                <i class="bi bi-heart-pulse me-2"></i>OrdoMed
-            </a>
-            
-            <!-- Date Picker (desktop only) -->
-            <div class="navbar-date-wrapper d-none d-lg-block">
-                <div class="navbar-date-modern">
-                    <div class="date-icon">
-                        <i class="bi bi-calendar-event me-1"></i>
-                    </div>
-                    <div class="date-content">
-                        <div class="date-month" id="date-d"></div>
-                        <div class="date-month" id="date-m"></div>
-                        <div class="date-month" id="date-y"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Mobile User Dropdown -->
-            <div class="d-lg-none ms-auto">
-                <div class="dropdown">
-                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle me-1"></i>Dr. Lite
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ordonnanceSettingsModal">
-                            <i class="bi bi-gear me-2"></i>Paramètres ordonnance
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item-text small text-warning">Version Lite</li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#" id="logout-mobile">
-                            <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
-                        </a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <button class="navbar-toggler ms-2 sidebar-toggle" type="button">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav ms-3">
-                    <!-- User Dropdown (desktop) -->
-                    <li class="nav-item dropdown d-none d-lg-block">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle me-1"></i>Dr. Lite
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ordonnanceSettingsModal">
-                                <i class="bi bi-gear me-2"></i>Paramètres ordonnance
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li class="dropdown-item-text small text-warning">Version Lite</li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="logout-desktop">
-                                <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
-                            </a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<body>
 
     <!-- Sidebar -->
     <div class="app-sidebar no-print" id="sidebar">
         <div class="sidebar-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Menu</h5>
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <img src="images/favicon-simple.svg" alt="OrdoMed" width="32" height="32" class="me-2">
+                <span class="fs-4 fw-bold">OrdoMed</span>
+            </a>
             <button class="btn-close d-lg-none sidebar-close"></button>
         </div>
-        <ul class="app-sidebar-nav list-unstyled mb-0">
-            <li>
-                <a href="dashboard.html" class="app-sidebar-link">
-                    <i class="bi bi-house me-2"></i>Tableau de bord
-                </a>
-            </li>
-            <li class="mt-3 app-sidebar-header px-3 mb-1 text-muted text-uppercase small">Gestion</li>
-            <li>
-                <a href="ordonnance.html" class="app-sidebar-link active">
-                    <i class="bi bi-file-medical me-2"></i>Ordonnances
-                </a>
-            </li>
-            <li class="pro-feature" title="Dans la version Pro après abonnement">
-                <a href="#" class="app-sidebar-link text-muted">
-                    <i class="bi bi-person-lines-fill me-2"></i>Patients
-                    <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
-                </a>
-            </li>
-            <li class="pro-feature" title="Dans la version Pro après abonnement">
-                <a href="#" class="app-sidebar-link text-muted">
-                    <i class="bi bi-capsule me-2"></i>Médicaments
-                    <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-    <!-- Main Content -->
-    <main class="main-content p-3 p-md-4">
-        <div class="container-fluid page-compact" id="ordonnance-create-main">
-            <div class="d-flex justify-content-between align-items-center mb-4 no-print">
-                <h1 class="h3 mb-0">
-                    <i class="bi bi-file-medical me-2"></i>Nouvelle Ordonnance
-                </h1>
-                <div class="d-flex gap-2">
-                    <a href="dashboard.html" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-1"></i>Retour à la liste
+        <div class="sidebar-content">
+            <ul class="app-sidebar-nav list-unstyled mb-0">
+                <li class="sidebar-item">
+                    <a href="dashboard.html" class="app-sidebar-link">
+                        <i class="bi bi-house-door me-2"></i> Tableau de bord
                     </a>
-                </div>
-            </div>
+                </li>
+                <li class="mt-3 app-sidebar-header px-3 mb-1 text-muted text-uppercase small">Prescriptions</li>
+                <li class="sidebar-item">
+                    <a href="ordonnance.html" class="app-sidebar-link active">
+                        <i class="bi bi-file-medical me-2"></i> Ordonnances
+                    </a>
+                </li>
+                
+                <li class="mt-3 app-sidebar-header px-3 mb-1 text-muted text-uppercase small">Bases de données</li>
+                <li class="sidebar-item pro-feature">
+                    <a href="#" class="app-sidebar-link text-muted d-flex align-items-center">
+                        <i class="bi bi-people me-2"></i> Patients
+                        <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
+                    </a>
+                </li>
+                <li class="sidebar-item pro-feature">
+                    <a href="#" class="app-sidebar-link text-muted d-flex align-items-center">
+                        <i class="bi bi-capsule me-2"></i> Médicaments
+                        <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-            <div class="no-print">
-                <!-- Informations générales -->
-                <div class="card mb-3">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">
-                            <i class="bi bi-info-circle me-2"></i>Informations générales
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Date de l'ordonnance</label>
-                                <div class="custom-combobox">
-                                    <i class="bi bi-calendar-date combobox-icon"></i>
-                                    <input type="date" id="ordo-date" class="form-control" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Code APCI <span class="text-muted small">(optionnel)</span></label>
-                                <div class="input-group">
-                                    <input type="text" id="code-apci" class="form-control" placeholder="Ex: 12345">
-                                </div>
-                            </div>
+    <!-- Wrapper -->
+    <div class="app-wrapper">
+        <header class="app-header no-print">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3 w-100">
+                <div class="container-fluid position-relative">
+                    <div class="d-flex align-items-center">
+                        <button class="navbar-toggler ms-2 sidebar-toggle" type="button">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-date-modern ms-3 d-none d-md-flex">
+                            <i class="bi bi-calendar3 text-primary"></i>
+                            <span id="navbar-date-display" class="fw-semibold"></span>
                         </div>
                     </div>
                 </div>
+            </nav>
+        </header>
 
-                <!-- Informations patient -->
-                <div class="card mb-3">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">
-                            <i class="bi bi-person-vcard me-2"></i>Informations patient
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
+        <main class="app-content p-3 p-md-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 no-print flex-wrap gap-2">
+                <h1 class="h3 mb-0 section-title">
+                    <i class="bi bi-file-medical"></i><span>Nouvelle Ordonnance</span>
+                </h1>
+                <button id="save-print-btn" class="btn btn-primary">
+                    <i class="bi bi-printer me-1"></i> Imprimer
+                </button>
+            </div>
+
+            <div class="row g-4 no-print">
+                <div class="col-md-5">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white section-title">
+                            <i class="bi bi-person text-primary"></i><h5 class="mb-0">Informations</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
                                 <label class="form-label">Nom du patient</label>
-                                <div class="custom-combobox">
-                                    <i class="bi bi-person combobox-icon"></i>
-                                    <input type="text" id="patient-name" class="form-control" placeholder="Ex: Jean Dupont">
-                                </div>
+                                <input type="text" id="patient-name" class="form-control" placeholder="Ex: Jean Dupont">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Date de naissance</label>
-                                <div class="custom-combobox">
-                                    <i class="bi bi-calendar-date combobox-icon"></i>
-                                    <input type="text" id="patient_birth_date" class="form-control" placeholder="JJ/MM/AAAA">
+                            <div class="mb-3">
+                                <label class="form-label">Date de l'ordonnance</label>
+                                <input type="date" id="ordo-date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Code APCI (Optionnel)</label>
+                                <input type="text" id="code-apci" class="form-control" placeholder="Ex: 12345">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white section-title">
+                            <i class="bi bi-capsule text-primary"></i><h5 class="mb-0">Médicaments</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-2 mb-1 d-none d-sm-flex">
+                                <div class="col-5"><small class="text-muted">Médicament</small></div>
+                                <div class="col-5"><small class="text-muted">Posologie</small></div>
+                            </div>
+                            <div id="med-rows"></div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <span class="section-title mb-0"><i class="bi bi-sliders text-primary"></i><h5 class="mb-0">Paramétrage Impression</h5></span>
+                            <button id="save-settings-btn" class="btn btn-sm btn-outline-success">Sauvegarder</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label small">Date Y (cm)</label>
+                                    <input type="number" step="0.1" id="set-date-y" class="form-control form-control-sm" value="4.5">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small">Patient Y (cm)</label>
+                                    <input type="number" step="0.1" id="set-patient-y" class="form-control form-control-sm" value="5.5">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small">APCI Y (cm)</label>
+                                    <input type="number" step="0.1" id="set-apci-y" class="form-control form-control-sm" value="6.5">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small">Médicaments Y (cm)</label>
+                                    <input type="number" step="0.1" id="set-meds-y" class="form-control form-control-sm" value="7.5">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Médicaments prescrits -->
-                <div class="card mb-3">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="bi bi-capsule me-2"></i>Médicaments prescrits
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row align-items-end mb-3">
-                            <div class="col-md-5 mb-3 mb-md-0">
-                                <label class="form-label">Médicament</label>
-                                <div class="custom-combobox">
-                                    <i class="bi bi-capsule combobox-icon"></i>
-                                    <input type="text" id="med-name" class="form-control" placeholder="Nom du médicament">
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <label class="form-label">Posologie</label>
-                                <div class="custom-combobox">
-                                    <i class="bi bi-clipboard2-pulse combobox-icon"></i>
-                                    <input type="text" id="med-posologie" class="form-control" placeholder="ex: 1x matin et soir">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <button id="add-med-btn" class="btn btn-outline-primary w-100">
-                                    <i class="bi bi-plus-circle me-1"></i> Ajouter
-                                </button>
-                            </div>
+                <div class="col-md-7">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white section-title">
+                            <i class="bi bi-eye text-primary"></i><h5 class="mb-0">Aperçu Avant Impression</h5>
                         </div>
-                        <ul id="med-list" class="list-group list-group-flush mb-0"></ul>
-                    </div>
-                </div>
-
-                <!-- Submit -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-end gap-2">
-                            <a href="dashboard.html" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-1"></i>Annuler
-                            </a>
-                            <button id="save-print-btn" class="btn btn-primary">
-                                <i class="bi bi-check-circle me-1"></i> Imprimer et enregistrer
-                            </button>
+                        <div class="card-body p-0 bg-light" style="overflow: hidden;">
+                            <div id="print-area" class="print-preview">
+                                <div id="preview-date" style="position: absolute; width: 100%; text-align: center;"></div>
+                                <div id="preview-patient" style="position: absolute; width: 100%; text-align: center; font-weight: 500; font-size: 1.2rem;"></div>
+                                <div id="preview-apci" style="position: absolute; width: 100%; text-align: center; font-weight: 500;"></div>
+                                <div id="preview-meds" style="position: absolute; width: 100%; padding: 0 2cm;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Print live view (hidden until print) -->
-            <div id="print-area" class="print-preview no-print-screen" style="display: none;">
-                <div id="preview-date" style="position: absolute; width: 100%; text-align: center;"></div>
-                <div id="preview-patient" style="position: absolute; width: 100%; text-align: center; font-weight: 500; font-size: 1.2rem;"></div>
-                <div id="preview-apci" style="position: absolute; width: 100%; text-align: center; font-weight: 500;"></div>
-                <div id="preview-meds" style="position: absolute; width: 100%; padding: 0 2cm;"></div>
-            </div>
-        </div>
-    </main>
-
-    <div class="modal fade" id="ordonnanceSettingsModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">
-              <i class="bi bi-gear me-2"></i>Paramètres d'ordonnance
-            </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form id="ordonnance-settings-form" method="post">
-            
-            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-              <div id="settings-alert" class="alert d-none" role="alert"></div>
-
-              <div class="row g-4">
-                <!-- Form sections -->
-                <div class="col-lg-12">
-
-                  <!-- Type d'ordonnance -->
-                  <div class="mb-3">
-                    <label class="form-label fw-semibold" for="ordonnance_type">
-                      <i class="bi bi-file-medical me-1"></i>Type d'ordonnance
-                    </label>
-                    <select name="ordonnance_type" class="form-select" id="ordonnance_type" required>
-                      <option value="">Sélectionner un type</option>
-                    </select>
-                    <div class="form-text">Chaque type peut avoir ses propres réglages d'impression.</div>
-                  </div>
-
-                  <!-- Page & Marges -->
-                  <div class="mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                      <span class="badge text-bg-secondary me-2">1</span>
-                      <h6 class="m-0">Page et marges</h6>
-                    </div>
-                    <div class="row g-1">
-                      <div class="col-md-4">
-                        <label class="form-label small" for="page_format">Format</label>
-                        <select name="page_format" class="form-select" id="page_format">
-                          <option value="A4">A4</option>
-                          <option value="A5" selected>A5</option>
-                          <option value="Letter">Letter</option>
-                        </select>
-                      </div>
-                      <div class="col-md-4">
-                        <label class="form-label small" for="orientation">Orientation</label>
-                        <select name="orientation" class="form-select" id="orientation">
-                          <option value="portrait" selected>Portrait</option>
-                          <option value="landscape">Paysage</option>
-                        </select>
-                      </div>
-                      <div class="col-md-4">
-                        <label class="form-label small" for="header_spacer_cm">Espace entête (cm)</label>
-                        <input type="number" name="header_spacer_cm" class="form-control" id="header_spacer_cm" value="4.5" min="0" max="15" step="0.1">
-                      </div>
-                    </div>
-                    <div class="row g-1 mt-2">
-                      <div class="col-3">
-                        <label class="form-label small" for="margin_top">Marge haut (cm)</label>
-                        <input type="number" name="margin_top" class="form-control" id="margin_top" value="0" min="0" max="5" step="0.1">
-                      </div>
-                      <div class="col-3">
-                        <label class="form-label small" for="margin_right">Marge droite (cm)</label>
-                        <input type="number" name="margin_right" class="form-control" id="margin_right" value="1" min="0" max="5" step="0.1">
-                      </div>
-                      <div class="col-3">
-                        <label class="form-label small" for="margin_bottom">Marge bas (cm)</label>
-                        <input type="number" name="margin_bottom" class="form-control" id="margin_bottom" value="0" min="0" max="5" step="0.1">
-                      </div>
-                      <div class="col-3">
-                        <label class="form-label small" for="margin_left">Marge gauche (cm)</label>
-                        <input type="number" name="margin_left" class="form-control" id="margin_left" value="1" min="0" max="5" step="0.1">
-                      </div>
-                    </div>
-                    <div class="alert alert-info py-2 px-3 small mt-2 mb-0">
-                      <i class="bi bi-info-circle me-1"></i>
-                      Le format, l'orientation et les marges définissent la zone imprimable. L'espace entête rÚserve une bande en haut (logos/en-tÛtes) et n'affecte pas la position Y des éléments.
-                    </div>
-                  </div>
-
-                  <!-- Position de la date -->
-                  <div class="mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                      <span class="badge text-bg-secondary me-2">2</span>
-                      <h6 class="m-0">Position de la date</h6>
-                      <i class="bi bi-question-circle ms-2" data-bs-toggle="tooltip" title="Réglez la distance depuis le haut de la page (cm) et l\'alignement horizontal."></i>
-                    </div>
-                    <div class="row g-1">
-                      <div class="col-md-5">
-                        <label class="form-label small" for="date_position_y">Position verticale (cm)</label>
-                        <input type="number" name="date_position_y" class="form-control" id="date_position_y" value="4.5" min="0" max="20" step="0.1">
-                      </div>
-                      <div class="col-md-7">
-                        <label class="form-label small" for="date_align">Alignement horizontal</label>
-                        <select name="date_align" class="form-select" id="date_align">
-                          <option value="left">Gauche</option>
-                          <option value="center" selected>Centre</option>
-                          <option value="right">Droite</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Position du patient -->
-                  <div class="mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                      <span class="badge text-bg-secondary me-2">3</span>
-                      <h6 class="m-0">Position du patient</h6>
-                      <i class="bi bi-question-circle ms-2" data-bs-toggle="tooltip" title="Réglez la position verticale et l\'alignement du nom du patient."></i>
-                    </div>
-                    <div class="row g-1">
-                      <div class="col-md-5">
-                        <label class="form-label small" for="patient_position_y">Position verticale (cm)</label>
-                        <input type="number" name="patient_position_y" class="form-control" id="patient_position_y" value="5.5" min="0" max="20" step="0.1">
-                      </div>
-                      <div class="col-md-7">
-                        <label class="form-label small" for="patient_align">Alignement horizontal</label>
-                        <select name="patient_align" class="form-select" id="patient_align">
-                          <option value="left">Gauche</option>
-                          <option value="center" selected>Centre</option>
-                          <option value="right">Droite</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Code APCI -->
-                  <div class="mb-2">
-                    <div class="d-flex align-items-center mb-2">
-                      <span class="badge text-bg-secondary me-2">4</span>
-                      <h6 class="m-0">Code APCI</h6>
-                      <i class="bi bi-question-circle ms-2" data-bs-toggle="tooltip" title="Réglez la position du code APCI et son alignement, et choisissez si le libellé doit Ûtre affiché."></i>
-                    </div>
-                    <div class="row g-1">
-                      <div class="col-md-5">
-                        <label class="form-label small" for="apci_position_y">Position verticale (cm)</label>
-                        <input type="number" name="apci_position_y" class="form-control" id="apci_position_y" value="6.5" min="0" max="25" step="0.1">
-                      </div>
-                      <div class="col-md-4">
-                        <label class="form-label small" for="apci_align">Alignement horizontal</label>
-                        <select name="apci_align" class="form-select" id="apci_align">
-                          <option value="left">Gauche</option>
-                          <option value="center" selected>Centre</option>
-                          <option value="right">Droite</option>
-                        </select>
-                      </div>
-                      <div class="col-md-3 d-flex align-items-end">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="apci_show_label" name="apci_show_label" checked>
-                          <label class="form-check-label" for="apci_show_label">Afficher le libellé</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Médicaments -->
-                    <div class="mb-2">
-                      <div class="d-flex align-items-center mb-2">
-                        <span class="badge text-bg-secondary me-2">5</span>
-                        <h6 class="m-0">Médicaments</h6>
-                        <i class="bi bi-question-circle ms-2" data-bs-toggle="tooltip" title="Définissez la position de départ des lignes de médicaments et le nombre maximal par page."></i>
-                      </div>
-                      <div class="row g-1">
-                        <div class="col-md-6">
-                          <label class="form-label small" for="medications_position_y">Position des médicaments (cm)</label>
-                          <input type="number" name="medications_position_y" class="form-control" id="medications_position_y" value="7.5" min="0" max="25" step="0.1">
-                        </div>
-                        <div class="col-md-6">
-                          <label class="form-label small" for="max_medications">Médicaments max/page</label>
-                          <input type="number" name="max_medications" class="form-control" id="max_medications" value="7" min="1" max="20">
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer bg-light border-top">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                <i class="bi bi-x-lg me-1"></i>Annuler
-              </button>
-              <button type="submit" class="btn btn-primary">
-                <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true" id="settings-spinner"></span>
-                <i class="bi bi-check-lg me-1"></i>Sauvegarder
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+        </main>
     </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button id="save-settings-btn" class="btn btn-success" data-bs-dismiss="modal">Sauvegarder</button>
-                </div>
+    <!-- Gabarit d'une ligne médicament (utilisé par le JS) -->
+    <template id="med-row-template">
+        <div class="row g-2 mb-2 med-row align-items-center">
+            <div class="col-5">
+                <input type="text" class="form-control med-name" placeholder="Nom du médicament">
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control med-posologie" placeholder="Posologie">
+            </div>
+            <div class="col-2 text-end">
+                <button type="button" class="btn btn-outline-danger btn-sm btn-remove-med" title="Supprimer">
+                    <i class="bi bi-trash"></i>
+                </button>
             </div>
         </div>
-    </div>
+    </template>
 
     <script type="module" src="js/ordonnance.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Sidebar toggle logic
         document.querySelector('.sidebar-toggle')?.addEventListener('click', () => {
@@ -475,11 +229,11 @@
         });
         
         // Date display
-        const d = new Date();
-        const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
-        document.getElementById('date-d').textContent = d.getDate().toString().padStart(2, '0');
-        document.getElementById('date-m').textContent = months[d.getMonth()];
-        document.getElementById('date-y').textContent = d.getFullYear();
+        const dateDisplay = document.getElementById('navbar-date-display');
+        if(dateDisplay) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateDisplay.textContent = new Date().toLocaleDateString('fr-FR', options);
+        }
     </script>
 </body>
 </html>
