@@ -1,0 +1,44 @@
+/* OrdoMed Lite Custom Styles */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.pro-feature {
+    opacity: 0.6;
+    pointer-events: none;
+    filter: grayscale(100%);
+    transition: all 0.3s;
+}
+
+.pro-feature:hover {
+    opacity: 0.8;
+}
+
+/* Impression Ordonnance */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #print-area, #print-area * {
+        visibility: visible;
+    }
+    #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    .no-print {
+        display: none !important;
+    }
+}
+
+.print-preview {
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    min-height: 297mm; /* A4 */
+    width: 210mm;
+    margin: 0 auto;
+    position: relative;
+}
