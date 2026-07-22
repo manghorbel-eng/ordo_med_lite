@@ -3,8 +3,10 @@ let medications = [];
 
 async function init() {
     session = await checkAuth();
-    await loadSettings();
-    updatePreview();
+    if (session) {
+        await loadSettings();
+        updatePreview();
+    }
 }
 
 // Paramètres par défaut
@@ -16,7 +18,7 @@ let settings = {
 };
 
 async function loadSettings() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('ordonnance_settings')
         .select('*')
         .eq('user_id', session.user.id)
@@ -43,7 +45,7 @@ document.getElementById('save-settings-btn').addEventListener('click', async () 
     
     updatePreview();
 
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('ordonnance_settings')
         .upsert({
             user_id: session.user.id,
@@ -110,7 +112,7 @@ document.getElementById('save-print-btn').addEventListener('click', async () => 
 
     // 1. Chercher si le patient existe (non supprimé)
     let patientId;
-    const { data: existingPatients } = await supabase
+    const { data: existingPatients } = await supabaseClient
         .from('patients')
         .select('id')
         .eq('user_id', session.user.id)
@@ -122,7 +124,7 @@ document.getElementById('save-print-btn').addEventListener('click', async () => 
         patientId = existingPatients[0].id;
     } else {
         // Sinon le créer
-        const { data: newPatient } = await supabase
+        const { data: newPatient } = await supabaseClient
             .from('patients')
             .insert({ user_id: session.user.id, patient_name: patientName, is_deleted: false })
             .select()
@@ -131,7 +133,7 @@ document.getElementById('save-print-btn').addEventListener('click', async () => 
     }
 
     // 2. Créer l'Ordonnance
-    const { data: ordoData } = await supabase
+    const { data: ordoData } = await supabaseClient
         .from('ordonnances')
         .insert({
             user_id: session.user.id,
@@ -150,7 +152,7 @@ document.getElementById('save-print-btn').addEventListener('click', async () => 
             posologie: m.posologie,
             is_deleted: false
         }));
-        await supabase.from('ordonnance_items').insert(itemsToInsert);
+        await supabaseClient.from('ordonnance_items').insert(itemsToInsert);
     }
 
     // Lancer l'impression
