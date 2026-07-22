@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrdoMed - Tableau de bord</title>
+    
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="images/favicon-simple.svg">
+    <link rel="apple-touch-icon" sizes="192x192" href="images/favicon-192.svg">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <style>
+        .pro-feature {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .pro-feature > * {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="app-sidebar" id="sidebar">
+        <div class="sidebar-header d-flex justify-content-between align-items-center">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <img src="images/favicon-simple.svg" alt="OrdoMed" width="32" height="32" class="me-2">
+                <span class="fs-4 fw-bold">OrdoMed</span>
+            </a>
+            <button class="btn-close d-lg-none sidebar-close"></button>
+        </div>
+        <div class="sidebar-content">
+            <ul class="app-sidebar-nav list-unstyled mb-0">
+                <li class="sidebar-item">
+                    <a href="dashboard.html" class="app-sidebar-link active">
+                        <i class="bi bi-house-door me-2"></i> Tableau de bord
+                    </a>
+                </li>
+                <li class="mt-3 app-sidebar-header px-3 mb-1 text-muted text-uppercase small">Prescriptions</li>
+                <li class="sidebar-item">
+                    <a href="ordonnance.html" class="app-sidebar-link">
+                        <i class="bi bi-file-medical me-2"></i> Ordonnances
+                    </a>
+                </li>
+                
+                <li class="mt-3 app-sidebar-header px-3 mb-1 text-muted text-uppercase small">Bases de données</li>
+                <li class="sidebar-item pro-feature" title="Dans la version Pro après abonnement">
+                    <a href="#" class="app-sidebar-link text-muted d-flex align-items-center">
+                        <i class="bi bi-people me-2"></i> Patients
+                        <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
+                    </a>
+                </li>
+                <li class="sidebar-item pro-feature" title="Dans la version Pro après abonnement">
+                    <a href="#" class="app-sidebar-link text-muted d-flex align-items-center">
+                        <i class="bi bi-capsule me-2"></i> Médicaments
+                        <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
+                    </a>
+                </li>
+                
+                <li class="mt-3 app-sidebar-header px-3 mb-1 text-muted text-uppercase small">Analyses</li>
+                <li class="sidebar-item pro-feature" title="Dans la version Pro après abonnement">
+                    <a href="#" class="app-sidebar-link text-muted d-flex align-items-center">
+                        <i class="bi bi-graph-up me-2"></i> Statistiques
+                        <span class="badge bg-secondary ms-auto" style="font-size: 0.6rem;">PRO</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Wrapper -->
+    <div class="app-wrapper">
+        <header class="app-header">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3 w-100">
+                <div class="container-fluid position-relative">
+                    <div class="d-flex align-items-center">
+                        <button class="navbar-toggler ms-2 sidebar-toggle" type="button">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-date-modern ms-3 d-none d-md-flex">
+                            <i class="bi bi-calendar3 text-primary"></i>
+                            <span id="navbar-date-display" class="fw-semibold"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center ms-auto gap-3">
+                        <button id="logout-btn" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-box-arrow-right"></i> Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="app-content p-3 p-md-4">
+            <h1 class="h3 mb-4">Tableau de bord</h1>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-primary mb-3"><i class="bi bi-file-earmark-medical"></i></div>
+                            <h5 class="card-title">Nouvelle Ordonnance</h5>
+                            <p class="card-text text-muted">Créer et imprimer une ordonnance rapidement.</p>
+                            <a href="ordonnance.html" class="btn btn-primary mt-2">Créer une ordonnance</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm pro-feature">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-secondary mb-3"><i class="bi bi-people"></i></div>
+                            <h5 class="card-title">Dossiers Patients</h5>
+                            <p class="card-text text-muted">Gérez l'historique complet de vos patients.</p>
+                            <span class="badge bg-secondary">Dans la version Pro après abonnement</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm pro-feature">
+                        <div class="card-body text-center">
+                            <div class="display-4 text-secondary mb-3"><i class="bi bi-capsule"></i></div>
+                            <h5 class="card-title">Base de Médicaments</h5>
+                            <p class="card-text text-muted">Accédez à la base complète des médicaments.</p>
+                            <span class="badge bg-secondary">Dans la version Pro après abonnement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Set date
+        const dateDisplay = document.getElementById('navbar-date-display');
+        if(dateDisplay) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateDisplay.textContent = new Date().toLocaleDateString('fr-FR', options);
+        }
+
+        // Sidebar toggle logic
+        document.querySelector('.sidebar-toggle')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('show');
+        });
+        document.querySelector('.sidebar-close')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('show');
+        });
+
+        // Auth
+        checkAuth();
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
