@@ -1,44 +1,1303 @@
-/* OrdoMed Lite Custom Styles */
+/* OrdoMed Custom Styles */
 
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --sidebar-width: 240px;
+    --navbar-height: 70px;
+}
+.navbar-date-pill {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+#navbar-date-display {
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+/* Dark theme variables */
+[data-bs-theme="dark"] {
+    --bs-body-bg: #1a1a1a;
+    --bs-body-color: #e9ecef;
+    --bs-border-color: #495057;
+}
+
+/* Body and Layout */
 body {
-    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+/* Proposition 1 : Badge moderne */
+.navbar-date-modern {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    cursor: default;
+    transition: all 0.3s ease;
 }
 
-.pro-feature {
-    opacity: 0.6;
-    pointer-events: none;
-    filter: grayscale(100%);
-    transition: all 0.3s;
+.navbar-date-modern:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
 }
 
-.pro-feature:hover {
+.date-icon {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.date-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+}
+
+.date-day {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.date-year {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Proposition 2 : Timeline */
+.date-timeline {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    cursor: default;
+    transition: all 0.3s ease;
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.date-timeline:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-left-color: rgba(255, 255, 255, 0.6);
+}
+
+.date-text {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.date-separator {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0 0.75rem;
+}
+
+.date-main {
+    font-family: 'SF Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Proposition 3 : Carte */
+.date-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: default;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.date-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.date-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
     opacity: 0.8;
+    color: #fff;
+    margin-bottom: 0.25rem;
 }
 
-/* Impression Ordonnance */
+.date-card-body {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    font-family: monospace;
+}
+
+/* Proposition 4 : Flip animé */
+.date-flip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: default;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.date-flip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.date-flip:hover::before {
+    left: 100%;
+}
+
+.date-flip:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.flip-icon {
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.flip-date {
+    color: #fff;
+    font-weight: 600;
+}
+
+.flip-day {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.flip-rest {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.main-content {
+    margin-top: var(--navbar-height); /* Account for fixed navbar */
+    margin-left: var(--sidebar-width); /* Space for left sidebar when authenticated */
+    flex: 1;
+    padding-bottom: 60px; /* Account for footer */
+}
+
+/* Sidebar */
+.app-sidebar {
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--navbar-height));
+    background-color: var(--bs-light);
+    border-right: 1px solid var(--bs-border-color);
+    z-index: 1030;
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    transform: translateX(0);
+}
+
+/* Show sidebar when toggled */
+.app-sidebar.show {
+    transform: translateX(0);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.app-sidebar-inner {
+    height: 100%;
+}
+
+.app-sidebar-header {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+}
+
+.app-sidebar-nav {
+    padding-left: 0;
+}
+
+.app-sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+    margin-bottom: 0.15rem;
+    border-radius: 0.5rem;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.app-sidebar-link i {
+    font-size: 1.1rem;
+}
+
+.app-sidebar-link:hover {
+    background-color: rgba(13, 110, 253, 0.08);
+    color: var(--primary-color);
+    transform: translateX(1px);
+}
+
+.app-sidebar-link.active {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+
+    .app-sidebar {
+        width: 220px;
+    }
+}
+
+/* Navigation */
+.navbar-brand {
+    font-size: 1.25rem;
+}
+
+.nav-link {
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.375rem;
+}
+
+.navbar.navbar-dark.bg-primary {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.navbar.navbar-dark.bg-primary .navbar-brand {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.navbar.navbar-dark.bg-primary .navbar-text,
+.navbar.navbar-dark.bg-primary .navbar-nav .nav-link {
+    font-size: 0.95rem;
+}
+
+/* Date centrée dans la barre de navigation */
+.navbar-date-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.navbar-date-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.75rem;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(4px);
+}
+
+.navbar-date-pill i {
+    font-size: 0.9rem;
+}
+
+#navbar-date-picker {
+    min-width: 120px;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+}
+
+#navbar-date-picker:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-date-wrapper {
+        position: static;
+        transform: none;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 0.25rem;
+    }
+}
+
+/* Make navbar menu text clearer (no transparency) */
+.navbar.navbar-dark .navbar-brand,
+.navbar.navbar-dark .navbar-nav .nav-link,
+.navbar.navbar-dark .navbar-nav .nav-link:focus,
+.navbar.navbar-dark .navbar-nav .nav-link:hover,
+.navbar.navbar-dark .navbar-nav .nav-link.active,
+.navbar.navbar-dark .navbar-nav .show > .nav-link {
+    color: #fff !important;
+}
+
+.navbar.navbar-dark .navbar-text,
+.navbar.navbar-dark .dropdown-menu .dropdown-item {
+    color: #fff;
+}
+
+/* Ensure user menu (dropdown) matches navbar bg-primary */
+.navbar.navbar-dark.bg-primary .dropdown-menu {
+    background-color: var(--bs-primary) !important; /* same as navbar */
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.navbar.navbar-dark.bg-primary .dropdown-menu .dropdown-item {
+    color: #fff !important;
+}
+
+/* Make dropdown informational text (e.g., subscription block) readable on primary background */
+.navbar.navbar-dark.bg-primary .dropdown-menu .dropdown-item-text {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Contextual colors tuned for dark/primary dropdown background */
+.navbar.navbar-dark.bg-primary .dropdown-menu .text-success {
+    color: #b6f0c2 !important;
+}
+
+.navbar.navbar-dark.bg-primary .dropdown-menu .text-warning {
+    color: #ffe08a !important;
+}
+
+.navbar.navbar-dark.bg-primary .dropdown-menu .text-danger {
+    color: #ffb3b3 !important;
+}
+
+.navbar.navbar-dark.bg-primary .dropdown-menu .dropdown-item:hover,
+.navbar.navbar-dark.bg-primary .dropdown-menu .dropdown-item:focus {
+    background-color: #0b5ed7 !important; /* slightly darker than primary */
+    color: #fff !important;
+}
+
+.navbar.navbar-dark.bg-primary .dropdown-divider {
+    border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: var(--bs-light);
+    border-bottom: 1px solid var(--bs-border-color);
+    font-weight: 600;
+}
+
+/* Titres de section plus compacts */
+.card-header h5 {
+    font-size: 1.05rem;
+}
+
+.card-header h6 {
+    font-size: 0.95rem;
+}
+
+[data-bs-theme="dark"] .card-header {
+    background-color: var(--bs-dark);
+}
+
+/* Dashboard stat cards */
+.dashboard-stat-card {
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.07);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-stat-card .card-header {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    background: linear-gradient(180deg, rgba(13, 110, 253, 0.06), rgba(13, 110, 253, 0));
+}
+
+.dashboard-stat-header h6 {
+    letter-spacing: 0.01em;
+}
+
+.dashboard-stat-list {
+    padding-left: 1.1rem;
+}
+
+.dashboard-stat-list li {
+    margin-bottom: 0.35rem;
+    line-height: 1.25rem;
+}
+
+.dashboard-stat-card .badge {
+    border-radius: 999px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color), #146c43);
+    border: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), #b02a37);
+    border: none;
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: 0.5rem;
+    border: 1px solid var(--bs-border-color);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--bs-body-color);
+}
+
+/* Tables */
+.table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: var(--bs-light);
+    border-bottom: 2px solid var(--bs-border-color);
+    font-weight: 600;
+}
+
+[data-bs-theme="dark"] .table th {
+    background-color: var(--bs-dark);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.075);
+}
+
+/* Pagination */
+.pagination .page-link {
+    border-radius: 0.5rem;
+    margin: 0 2px;
+    border: 1px solid var(--bs-border-color);
+}
+
+/* Sidebar header */
+.sidebar-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Sidebar overlay for mobile */
+body.sidebar-open::after {
+    content: '';
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1029;
+    display: none;
+}
+
+/* Adjust main content when sidebar is open on mobile */
+body.sidebar-open {
+    overflow: hidden;
+}
+
+/* Sidebar header close button */
+.sidebar-close {
+    margin-right: -0.5rem;
+    padding: 0.5rem;
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+    display: none;
+    padding: 0.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .app-sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+    }
+    
+    .app-sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    body.sidebar-open::after {
+        display: block;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    border-color: var(--primary-color);
+}
+
+/* Alerts */
+.alert {
+    border: none;
+    border-radius: 0.75rem;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: var(--success-color);
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+.alert-danger {
+    border-left-color: var(--danger-color);
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.alert-warning {
+    border-left-color: var(--warning-color);
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+.alert-info {
+    border-left-color: var(--info-color);
+    background-color: rgba(13, 202, 240, 0.1);
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    color: white;
+    border-radius: 1rem;
+}
+
+.dashboard-card .card-body {
+    padding: 0.75rem 1rem;;
+}
+
+.dashboard-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Stats Cards */
+.stats-card {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: white;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+[data-bs-theme="dark"] .stats-card {
+    background: var(--bs-dark);
+}
+
+.stats-card .stats-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.stats-card .stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card .stats-label {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+/* Patient Cards */
+.patient-card {
+    border-left: 4px solid var(--primary-color);
+}
+
+.patient-card .patient-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.patient-info {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+/* Medication Cards */
+.medication-card {
+    border-left: 4px solid var(--success-color);
+}
+
+.medication-name {
+    font-weight: 600;
+    color: var(--success-color);
+}
+
+.medication-details {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+/* Ordonnance Cards */
+.ordonnance-card {
+    border-left: 4px solid var(--info-color);
+}
+
+.ordonnance-id {
+    font-weight: 600;
+    color: var(--info-color);
+}
+
+/* Search and Filter */
+.search-filter-card {
+    background-color: var(--bs-light);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+[data-bs-theme="dark"] .search-filter-card {
+    background-color: var(--bs-dark);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-content {
+        margin-top: 60px;
+    }
+    
+    .dashboard-card h3 {
+        font-size: 1rem;
+    }
+    
+    .stats-card .stats-number {
+        font-size: 1.5rem;
+    }
+    
+    .action-buttons {
+        justify-content: center;
+    }
+}
+
+/* Loading Spinner */
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Theme Toggle Animation */
+#theme-toggle {
+    transition: transform 0.3s ease;
+}
+
+#theme-toggle:hover {
+    transform: rotate(180deg);
+}
+
+/* Form Validation */
+.is-invalid {
+    border-color: var(--danger-color);
+}
+
+.is-valid {
+    border-color: var(--success-color);
+}
+
+.invalid-feedback {
+    color: var(--danger-color);
+}
+
+.valid-feedback {
+    color: var(--success-color);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bs-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-track {
+    background: var(--bs-dark);
+}
+
+/* Print Styles */
 @media print {
-    body * {
-        visibility: hidden;
+    .navbar, .footer, .btn, .pagination {
+        display: none !important;
     }
-    #print-area, #print-area * {
-        visibility: visible;
+    
+    .main-content {
+        margin-top: 0;
+        margin-left: 0;
+        padding: 0;
     }
-    #print-area {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
+
+    /* Masquer la barre latérale à l'impression pour éviter la bordure verticale gauche */
+    .app-sidebar {
+        display: none !important;
     }
-    .no-print {
+    
+    /* Supprimer les bordures des cartes à l'impression pour éviter l'effet "formulaire" */
+    .card {
+        box-shadow: none;
+        border: none;
+    }
+
+    /* Ne pas imprimer les modals ou leur fond assombri */
+    .modal,
+    .modal-backdrop {
         display: none !important;
     }
 }
 
-.print-preview {
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    min-height: 297mm; /* A4 */
-    width: 210mm;
-    margin: 0 auto;
+/* Amélioration de l'affichage des erreurs de formulaire */
+
+/* Rendre les messages d'erreur plus visibles */
+.invalid-feedback,
+.error {
+    display: block !important;
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* Style pour les listes d'erreurs (validation de mot de passe) */
+.invalid-feedback ul,
+.error ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.invalid-feedback li,
+.error li {
+    padding: 0.25rem 0;
+    padding-left: 1.5rem;
     position: relative;
+}
+
+.invalid-feedback li:before,
+.error li:before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* CORRECTION: Supprimer l'icône d'exclamation pour les champs de type password */
+/* Cela évite le conflit avec l'icône œil de visibilité du mot de passe */
+input[type="password"].form-control.is-invalid {
+    border-color: var(--danger-color) !important;
+    background-image: none !important; /* Supprime l'icône d'exclamation */
+    padding-right: calc(0.75em + 0.375rem); /* Padding normal */
+}
+
+/* Pour les autres champs, garder l'icône d'exclamation */
+.form-control.is-invalid:not([type="password"]),
+.form-select.is-invalid {
+    border-color: var(--danger-color) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    padding-right: calc(1.5em + 0.75rem);
+}
+
+/* Espace entre le champ et son message d'erreur */
+.form-group.has-error .form-control,
+.form-group.has-error .form-select {
+    margin-bottom: 0.25rem;
+}
+
+/* Style spécifique pour crispy forms */
+.form-group .invalid-feedback {
+    display: block !important;
+    width: 100%;
+}
+
+/* Assurer que les erreurs non-field sont visibles */
+.alert.alert-danger ul {
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+}
+
+.alert.alert-danger li {
+    margin-bottom: 0.25rem;
+}
+
+/* Style pour les erreurs en haut du formulaire */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.errorlist li {
+    color: var(--danger-color);
+    padding: 0.5rem 1rem;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid var(--danger-color);
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Assurer la visibilité même avec le captcha */
+.captcha ~ .invalid-feedback {
+    margin-top: 0.5rem;
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] .invalid-feedback,
+[data-bs-theme="dark"] .error {
+    color: #f8b4b4;
+}
+
+[data-bs-theme="dark"] .errorlist li {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #f8b4b4;
+}
+.form-control::placeholder,
+.form-select::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #adb5bd !important;  /* Gris clair Bootstrap */
+    opacity: 1 !important;
+}
+/* Améliorations CSS pour la gestion des erreurs - À ajouter à style.css */
+
+/* ========================================
+   GESTION DES ERREURS DE FORMULAIRE
+   ======================================== */
+
+/* Messages d'erreur : Affichage et animations */
+.invalid-feedback,
+.error {
+    display: block !important;
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Animation d'apparition des erreurs */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation de disparition des erreurs */
+.invalid-feedback.d-none,
+.error.d-none {
+    animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+}
+
+/* Style pour les listes d'erreurs (validation de mot de passe) */
+.invalid-feedback ul,
+.error ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.invalid-feedback li,
+.error li {
+    padding: 0.25rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.invalid-feedback li:before,
+.error li:before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+/* Champs avec erreur */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--danger-color) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: var(--danger-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Icône d'exclamation pour les champs avec erreur */
+.form-control.is-invalid:not([type="password"]),
+.form-select.is-invalid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    padding-right: calc(1.5em + 0.75rem);
+}
+
+/* Champs de type password : pas d'icône d'exclamation pour éviter conflit avec le toggle */
+input[type="password"].form-control.is-invalid {
+    border-color: var(--danger-color) !important;
+    background-image: none !important;
+    padding-right: calc(0.75em + 0.375rem);
+}
+
+/* Transition fluide lors de la suppression de l'erreur */
+.form-control:not(.is-invalid),
+.form-select:not(.is-invalid) {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Espace entre le champ et son message d'erreur */
+.form-group.has-error .form-control,
+.form-group.has-error .form-select,
+.mb-3 .form-control.is-invalid,
+.mb-3 .form-select.is-invalid {
+    margin-bottom: 0.25rem;
+}
+
+/* Style spécifique pour crispy forms */
+.form-group .invalid-feedback {
+    display: block !important;
+    width: 100%;
+}
+
+/* Erreurs globales du formulaire */
+.alert.alert-danger ul {
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+}
+
+.alert.alert-danger li {
+    margin-bottom: 0.25rem;
+}
+
+/* Style pour les errorlist (Django) */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.errorlist li {
+    color: var(--danger-color);
+    padding: 0.5rem 1rem;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid var(--danger-color);
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Assurer la visibilité même avec le captcha */
+.captcha ~ .invalid-feedback {
+    margin-top: 0.5rem;
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] .invalid-feedback,
+[data-bs-theme="dark"] .error {
+    color: #f8b4b4;
+}
+
+[data-bs-theme="dark"] .errorlist li {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #f8b4b4;
+}
+
+[data-bs-theme="dark"] .form-control.is-invalid,
+[data-bs-theme="dark"] .form-select.is-invalid {
+    border-color: #f8b4b4 !important;
+}
+
+/* État de validation réussie (optionnel) */
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: var(--success-color) !important;
+    transition: border-color 0.3s ease;
+}
+
+.form-control.is-valid:focus,
+.form-select.is-valid:focus {
+    border-color: var(--success-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25) !important;
+}
+
+/* Amélioration de la visibilité des placeholders */
+.form-control::placeholder,
+.form-select::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #adb5bd !important;
+    opacity: 1 !important;
+}
+
+/* Focus état amélioré */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    outline: none;
+}
+
+/* Style pour les champs désactivés */
+.form-control:disabled,
+.form-select:disabled {
+    background-color: var(--bs-light);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+[data-bs-theme="dark"] .form-control:disabled,
+[data-bs-theme="dark"] .form-select:disabled {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Amélioration pour les inputs groupés avec boutons de toggle */
+.input-group .form-control.is-invalid {
+    border-right: 1px solid var(--danger-color) !important;
+}
+
+.input-group .form-control.is-invalid + .btn {
+    border-color: var(--danger-color) !important;
+}
+
+/* Responsive : ajustement pour mobile */
+@media (max-width: 768px) {
+    .invalid-feedback,
+    .error {
+        font-size: 0.8rem;
+    }
+    
+    .errorlist li {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Autoriser la classe d-none à masquer les messages d'erreur */
+.invalid-feedback.d-none,
+.error.d-none {
+    display: none !important;
+}
+
+/* Fixed-width table columns with ellipsis for long content */
+.table.table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table.table-fixed th,
+.table.table-fixed td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Compact layout for form pages (create/update) */
+.page-compact {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.page-compact .page-header-title {
+    font-size: 1.25rem;
+}
+
+.page-compact .page-header-subtitle {
+    font-size: 0.85rem;
+}
+
+.page-compact .card {
+    margin-bottom: 1.25rem;
+}
+
+.page-compact .card-header {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.page-compact .card-body {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.page-compact .form-label {
+    font-size: 0.9rem;
+}
+
+.page-compact .form-control,
+.page-compact .form-select {
+    font-size: 0.9rem;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+}
+
+/* Réduction des espacements verticaux dans les formulaires compacts */
+.page-compact form .mb-3,
+.page-compact form .mb-4 {
+    margin-bottom: 0.75rem !important;
 }
