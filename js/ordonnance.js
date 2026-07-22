@@ -18,7 +18,8 @@ let settings = {
 };
 
 async function loadSettings() {
-    const { data, error } = await supabaseClient
+    if (!window.supabaseClient) return;
+    const { data, error } = await window.supabaseClient
         .from('ordonnance_settings')
         .select('*')
         .eq('user_id', session.user.id)
@@ -37,24 +38,28 @@ async function loadSettings() {
     }
 }
 
-document.getElementById('save-settings-btn').addEventListener('click', async () => {
-    settings.date_position_y = parseFloat(document.getElementById('set-date-y').value);
-    settings.patient_position_y = parseFloat(document.getElementById('set-patient-y').value);
-    settings.apci_position_y = parseFloat(document.getElementById('set-apci-y').value);
-    settings.medications_position_y = parseFloat(document.getElementById('set-meds-y').value);
-    
-    updatePreview();
-
-    const { error } = await supabaseClient
-        .from('ordonnance_settings')
-        .upsert({
-            user_id: session.user.id,
-            ...settings,
-            updated_at: new Date()
-        }, { onConflict: 'user_id' });
+if (document.getElementById('save-settings-btn')) {
+    document.getElementById('save-settings-btn').addEventListener('click', async () => {
+        settings.date_position_y = parseFloat(document.getElementById('set-date-y').value);
+        settings.patient_position_y = parseFloat(document.getElementById('set-patient-y').value);
+        settings.apci_position_y = parseFloat(document.getElementById('set-apci-y').value);
+        settings.medications_position_y = parseFloat(document.getElementById('set-meds-y').value);
         
-    if (!error) alert('Réglages enregistrés !');
-});
+        updatePreview();
+
+        if (window.supabaseClient) {
+            const { error } = await window.supabaseClient
+                .from('ordonnance_settings')
+                .upsert({
+                    user_id: session.user.id,
+                    ...settings,
+                    updated_at: new Date()
+                }, { onConflict: 'user_id' });
+                
+            if (!error) alert('Réglages enregistrés !');
+        }
+    });
+}
 
 // Update Preview
 function updatePreview() {
@@ -62,6 +67,8 @@ function updatePreview() {
     const patientDiv = document.getElementById('preview-patient');
     const apciDiv = document.getElementById('preview-apci');
     const medsDiv = document.getElementById('preview-meds');
+
+    if (!dateDiv) return;
 
     dateDiv.style.top = `${settings.date_position_y}cm`;
     patientDiv.style.top = `${settings.patient_position_y}cm`;
@@ -83,80 +90,90 @@ function updatePreview() {
 }
 
 ['patient-name', 'code-apci'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updatePreview);
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updatePreview);
 });
 
 // Add Medication
-document.getElementById('add-med-btn').addEventListener('click', () => {
-    const name = document.getElementById('med-name').value;
-    const poso = document.getElementById('med-posologie').value;
-    if (!name) return;
+if (document.getElementById('add-med-btn')) {
+    document.getElementById('add-med-btn').addEventListener('click', () => {
+        const name = document.getElementById('med-name').value;
+        const poso = document.getElementById('med-posologie').value;
+        if (!name) return;
 
-    medications.push({ name, posologie: poso });
-    
-    const li = document.createElement('li');
-    li.className = 'list-group-item d-flex justify-content-between align-items-center py-2';
-    li.innerHTML = `<div><strong>${name}</strong> <span class="text-muted ms-2">${poso}</span></div>`;
-    document.getElementById('med-list').appendChild(li);
+        medications.push({ name, posologie: poso });
+        
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center py-2';
+        li.innerHTML = `<div><strong>${name}</strong> <span class="text-muted ms-2">${poso}</span></div>`;
+        document.getElementById('med-list').appendChild(li);
 
-    document.getElementById('med-name').value = '';
-    document.getElementById('med-posologie').value = '';
-    
-    updatePreview();
-});
+        document.getElementById('med-name').value = '';
+        document.getElementById('med-posologie').value = '';
+        
+        updatePreview();
+    });
+}
 
 // Save and Print
-document.getElementById('save-print-btn').addEventListener('click', async () => {
-    const patientName = document.getElementById('patient-name').value;
-    if (!patientName) return alert('Nom du patient requis.');
+if (document.getElementById('save-print-btn')) {
+    document.getElementById('save-print-btn').addEventListener('click', async () => {
+        const patientName = document.getElementById('patient-name').value;
+        if (!patientName) return alert('Nom du patient requis.');
 
-    // 1. Chercher si le patient existe (non supprimé)
-    let patientId;
-    const { data: existingPatients } = await supabaseClient
-        .from('patients')
-        .select('id')
-        .eq('user_id', session.user.id)
-        .eq('patient_name', patientName)
-        .eq('is_deleted', false)
-        .limit(1);
+        if (!window.supabaseClient) {
+            window.print();
+            return;
+        }
 
-    if (existingPatients && existingPatients.length > 0) {
-        patientId = existingPatients[0].id;
-    } else {
-        // Sinon le créer
-        const { data: newPatient } = await supabaseClient
+        // 1. Chercher si le patient existe (non supprimé)
+        let patientId;
+        const { data: existingPatients } = await window.supabaseClient
             .from('patients')
-            .insert({ user_id: session.user.id, patient_name: patientName, is_deleted: false })
+            .select('id')
+            .eq('user_id', session.user.id)
+            .eq('patient_name', patientName)
+            .eq('is_deleted', false)
+            .limit(1);
+
+        if (existingPatients && existingPatients.length > 0) {
+            patientId = existingPatients[0].id;
+        } else {
+            // Sinon le créer
+            const { data: newPatient } = await window.supabaseClient
+                .from('patients')
+                .insert({ user_id: session.user.id, patient_name: patientName, is_deleted: false })
+                .select()
+                .single();
+            patientId = newPatient.id;
+        }
+
+        // 2. Créer l'Ordonnance
+        const { data: ordoData } = await window.supabaseClient
+            .from('ordonnances')
+            .insert({
+                user_id: session.user.id,
+                patient_id: patientId,
+                code_apci: document.getElementById('code-apci').value,
+                is_deleted: false
+            })
             .select()
             .single();
-        patientId = newPatient.id;
-    }
 
-    // 2. Créer l'Ordonnance
-    const { data: ordoData } = await supabaseClient
-        .from('ordonnances')
-        .insert({
-            user_id: session.user.id,
-            patient_id: patientId,
-            code_apci: document.getElementById('code-apci').value,
-            is_deleted: false
-        })
-        .select()
-        .single();
+        // 3. Insérer les items
+        if (medications.length > 0) {
+            const itemsToInsert = medications.map(m => ({
+                ordonnance_id: ordoData.id,
+                medicament_name: m.name,
+                posologie: m.posologie,
+                is_deleted: false
+            }));
+            await window.supabaseClient.from('ordonnance_items').insert(itemsToInsert);
+        }
 
-    // 3. Insérer les items
-    if (medications.length > 0) {
-        const itemsToInsert = medications.map(m => ({
-            ordonnance_id: ordoData.id,
-            medicament_name: m.name,
-            posologie: m.posologie,
-            is_deleted: false
-        }));
-        await supabaseClient.from('ordonnance_items').insert(itemsToInsert);
-    }
-
-    // Lancer l'impression
-    window.print();
-});
+        // Lancer l'impression
+        window.print();
+    });
+}
 
 init();
