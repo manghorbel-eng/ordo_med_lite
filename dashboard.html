@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrdoMed Lite - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">OrdoMed Lite</a>
+            <div class="d-flex">
+                <button id="logout-btn" class="btn btn-outline-light btn-sm">Déconnexion</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Fonctionnalités Actives -->
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-file-earmark-medical fs-1 text-primary"></i>
+                        <h5 class="card-title mt-3">Nouvelle Ordonnance</h5>
+                        <p class="card-text text-muted">Créer et imprimer une ordonnance.</p>
+                        <a href="ordonnance.html" class="btn btn-primary">Créer</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fonctionnalités Désactivées (Pro) -->
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm pro-feature">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people fs-1 text-secondary"></i>
+                        <h5 class="card-title mt-3">Gestion des Patients</h5>
+                        <p class="card-text text-muted">Historique et dossiers complets.</p>
+                        <span class="badge bg-secondary">Dans la version Pro après abonnement</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm pro-feature">
+                    <div class="card-body text-center">
+                        <i class="bi bi-capsule fs-1 text-secondary"></i>
+                        <h5 class="card-title mt-3">Base Médicaments</h5>
+                        <p class="card-text text-muted">Recherche avancée et interactions.</p>
+                        <span class="badge bg-secondary">Dans la version Pro après abonnement</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm pro-feature">
+                    <div class="card-body text-center">
+                        <i class="bi bi-graph-up fs-1 text-secondary"></i>
+                        <h5 class="card-title mt-3">Statistiques</h5>
+                        <p class="card-text text-muted">Analyse de vos prescriptions.</p>
+                        <span class="badge bg-secondary">Dans la version Pro après abonnement</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/app.js"></script>
+    <script>
+        checkAuth();
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
