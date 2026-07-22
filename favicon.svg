@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="#0d6efd" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Heart pulse icon -->
+  <g fill="#ffffff" transform="translate(6, 8)">
+    <!-- Heart shape -->
+    <path d="M10 4.5C10 2.015 7.985 0 5.5 0S1 2.015 1 4.5c0 .885.24 1.715.661 2.428L10 16l8.339-9.072A4.46 4.46 0 0 0 19 4.5C19 2.015 16.985 0 14.5 0S10 2.015 10 4.5z" transform="scale(0.6) translate(2, 0)"/>
+    
+    <!-- Pulse line -->
+    <path d="M2 10h3l1-3 2 6 2-9 1 3h3" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(0, 2)"/>
+  </g>
+</svg>
