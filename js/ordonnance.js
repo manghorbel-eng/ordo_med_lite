@@ -32,20 +32,20 @@ async function loadSettings() {
         settings.apci_position_y = data.apci_position_y;
         settings.medications_position_y = data.medications_position_y;
         
-        document.getElementById('set-date-y').value = settings.date_position_y;
-        document.getElementById('set-patient-y').value = settings.patient_position_y;
-        document.getElementById('set-apci-y').value = settings.apci_position_y;
-        document.getElementById('set-meds-y').value = settings.medications_position_y;
+        document.getElementById('date_position_y').value = settings.date_position_y;
+        document.getElementById('patient_position_y').value = settings.patient_position_y;
+        document.getElementById('apci_position_y').value = settings.apci_position_y;
+        document.getElementById('medications_position_y').value = settings.medications_position_y;
     }
 }
 
-const saveSettingsBtn = document.getElementById('save-settings-btn');
-if (saveSettingsBtn) {
+const settingsForm = document.getElementById('ordonnance-settings-form');
+if (settingsForm) {
     saveSettingsBtn.addEventListener('click', async () => {
-        settings.date_position_y = parseFloat(document.getElementById('set-date-y').value);
-        settings.patient_position_y = parseFloat(document.getElementById('set-patient-y').value);
-        settings.apci_position_y = parseFloat(document.getElementById('set-apci-y').value);
-        settings.medications_position_y = parseFloat(document.getElementById('set-meds-y').value);
+        settings.date_position_y = parseFloat(document.getElementById('date_position_y').value);
+        settings.patient_position_y = parseFloat(document.getElementById('patient_position_y').value);
+        settings.apci_position_y = parseFloat(document.getElementById('apci_position_y').value);
+        settings.medications_position_y = parseFloat(document.getElementById('medications_position_y').value);
         
         updatePreview();
 
@@ -75,10 +75,23 @@ function updatePreview() {
     apciDiv.style.top = `${settings.apci_position_y}cm`;
     medsDiv.style.top = `${settings.medications_position_y}cm`;
 
-    dateDiv.textContent = `${new Date().toLocaleDateString('fr-FR')}`;
+    
+    const ordoDateInput = document.getElementById('ordo-date');
+    if(ordoDateInput && ordoDateInput.value) {
+        const d = new Date(ordoDateInput.value);
+        dateDiv.textContent = d.toLocaleDateString('fr-FR');
+    } else {
+        dateDiv.textContent = `${new Date().toLocaleDateString('fr-FR')}`;
+    }
+
     patientDiv.textContent = document.getElementById('patient-name').value;
     
+    
+    const ordoDateInput = document.getElementById('ordo-date');
+    if (ordoDateInput) ordoDateInput.addEventListener('input', updatePreview);
+    
     const apci = document.getElementById('code-apci').value;
+
     apciDiv.textContent = apci ? `Code APCI : ${apci}` : '';
 
     medsDiv.innerHTML = medications.map(m => `
