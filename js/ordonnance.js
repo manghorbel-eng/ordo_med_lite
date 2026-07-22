@@ -49,7 +49,7 @@ document.getElementById('save-settings-btn').addEventListener('click', async () 
             user_id: session.user.id,
             ...settings,
             updated_at: new Date()
-        });
+        }, { onConflict: 'user_id' });
         
     if (!error) alert('Réglages enregistrés !');
 });
@@ -66,16 +66,16 @@ function updatePreview() {
     apciDiv.style.top = `${settings.apci_position_y}cm`;
     medsDiv.style.top = `${settings.medications_position_y}cm`;
 
-    dateDiv.textContent = `Le ${new Date().toLocaleDateString('fr-FR')}`;
+    dateDiv.textContent = `${new Date().toLocaleDateString('fr-FR')}`;
     patientDiv.textContent = document.getElementById('patient-name').value;
     
     const apci = document.getElementById('code-apci').value;
-    apciDiv.textContent = apci ? `Code APCI: ${apci}` : '';
+    apciDiv.textContent = apci ? `Code APCI : ${apci}` : '';
 
     medsDiv.innerHTML = medications.map(m => `
-        <div style="margin-bottom: 0.5cm;">
-            <strong>${m.name}</strong><br>
-            <span style="font-size: 0.9em;">${m.posologie}</span>
+        <div style="margin-bottom: 0.5cm; display:flex; gap:2em;">
+            <strong>${m.name}</strong>
+            <span style="font-size: 0.9em; font-weight:normal;">${m.posologie}</span>
         </div>
     `).join('');
 }
@@ -93,8 +93,8 @@ document.getElementById('add-med-btn').addEventListener('click', () => {
     medications.push({ name, posologie: poso });
     
     const li = document.createElement('li');
-    li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    li.innerHTML = `${name} <small class="text-muted">${poso}</small>`;
+    li.className = 'list-group-item d-flex justify-content-between align-items-center py-2';
+    li.innerHTML = `<div><strong>${name}</strong> <span class="text-muted ms-2">${poso}</span></div>`;
     document.getElementById('med-list').appendChild(li);
 
     document.getElementById('med-name').value = '';
@@ -108,35 +108,52 @@ document.getElementById('save-print-btn').addEventListener('click', async () => 
     const patientName = document.getElementById('patient-name').value;
     if (!patientName) return alert('Nom du patient requis.');
 
-    // 1. Create/Find Patient (Simplified)
-    const { data: patientData } = await supabase
+    // 1. Chercher si le patient existe (non supprimé)
+    let patientId;
+    const { data: existingPatients } = await supabase
         .from('patients')
-        .insert({ user_id: session.user.id, patient_name: patientName })
-        .select()
-        .single();
+        .select('id')
+        .eq('user_id', session.user.id)
+        .eq('patient_name', patientName)
+        .eq('is_deleted', false)
+        .limit(1);
 
-    // 2. Create Ordonnance
+    if (existingPatients && existingPatients.length > 0) {
+        patientId = existingPatients[0].id;
+    } else {
+        // Sinon le créer
+        const { data: newPatient } = await supabase
+            .from('patients')
+            .insert({ user_id: session.user.id, patient_name: patientName, is_deleted: false })
+            .select()
+            .single();
+        patientId = newPatient.id;
+    }
+
+    // 2. Créer l'Ordonnance
     const { data: ordoData } = await supabase
         .from('ordonnances')
         .insert({
             user_id: session.user.id,
-            patient_id: patientData.id,
-            code_apci: document.getElementById('code-apci').value
+            patient_id: patientId,
+            code_apci: document.getElementById('code-apci').value,
+            is_deleted: false
         })
         .select()
         .single();
 
-    // 3. Insert Items
+    // 3. Insérer les items
     if (medications.length > 0) {
         const itemsToInsert = medications.map(m => ({
             ordonnance_id: ordoData.id,
             medicament_name: m.name,
-            posologie: m.posologie
+            posologie: m.posologie,
+            is_deleted: false
         }));
         await supabase.from('ordonnance_items').insert(itemsToInsert);
     }
 
-    // Print
+    // Lancer l'impression
     window.print();
 });
 
