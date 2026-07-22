@@ -35,6 +35,7 @@
             height: 80px;
             margin-bottom: 1rem;
         }
+        .auth-tabs .btn { min-width: 130px; }
     </style>
 </head>
 <body class="login-page">
@@ -46,32 +47,66 @@
                     <h2 class="h3 fw-bold text-primary">OrdoMed</h2>
                     <p class="text-muted">Géré de façon sécurisée par Supabase</p>
                 </div>
-                
-                <form id="auth-form">
+
+                <div class="auth-tabs d-flex justify-content-center gap-2 mb-4">
+                    <button type="button" id="tab-login" class="btn btn-primary btn-sm">Connexion</button>
+                    <button type="button" id="tab-signup" class="btn btn-outline-primary btn-sm">Créer un compte</button>
+                </div>
+
+                <!-- CONNEXION -->
+                <form id="login-form">
                     <div class="mb-3">
-                        <label class="form-label" for="email">Adresse email</label>
+                        <label class="form-label" for="login-email">Adresse email</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" id="email" class="form-control" placeholder="nom@exemple.com" required>
+                            <input type="email" id="login-email" class="form-control" placeholder="nom@exemple.com" required autocomplete="email">
                         </div>
                     </div>
-                    
                     <div class="mb-4">
-                        <label class="form-label" for="password">Mot de passe</label>
+                        <label class="form-label" for="login-password">Mot de passe</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" id="password" class="form-control" placeholder="••••••••" required minlength="6">
+                            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required minlength="6" autocomplete="current-password">
                         </div>
                     </div>
-                    
                     <div class="d-grid gap-2">
                         <button type="submit" id="login-btn" class="btn btn-primary btn-lg">
-                            <i class="bi bi-shield-lock me-2"></i>Se connecter / Créer un compte
+                            <i class="bi bi-shield-lock me-2"></i>Se connecter
                         </button>
                     </div>
-                    
-                    <div id="auth-error" class="alert mt-3 mb-0" style="display: none;" role="alert"></div>
                 </form>
+
+                <!-- CRÉATION DE COMPTE -->
+                <form id="signup-form" style="display:none;">
+                    <div class="mb-3">
+                        <label class="form-label" for="signup-email">Adresse email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" id="signup-email" class="form-control" placeholder="nom@exemple.com" required autocomplete="email">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="signup-password">Mot de passe</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" id="signup-password" class="form-control" placeholder="••••••••" required minlength="6" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="signup-password2">Confirmer le mot de passe</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" id="signup-password2" class="form-control" placeholder="••••••••" required minlength="6" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" id="signup-btn" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Créer mon compte
+                        </button>
+                    </div>
+                </form>
+
+                <div id="auth-msg" class="alert mt-3 mb-0" style="display: none;" role="alert"></div>
             </div>
         </div>
     </div>
