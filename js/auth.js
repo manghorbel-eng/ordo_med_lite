@@ -1,16 +1,12 @@
-if (document.getElementById('auth-form')) {
-    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+import { supabase } from './app.js';
+
+const authForm = document.getElementById('auth-form');
+if (authForm) {
+    authForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const errorDiv = document.getElementById('auth-error');
-
-        if (!window.supabaseClient || SUPABASE_URL === 'https://VOTRE_PROJET.supabase.co') {
-            errorDiv.className = "alert alert-warning mt-3 mb-0";
-            errorDiv.textContent = "Configuration manquante : Veuillez insérer votre URL et clé Supabase dans js/app.js !";
-            errorDiv.style.display = 'block';
-            return;
-        }
 
         errorDiv.style.display = 'none';
         const btn = document.getElementById('login-btn');
@@ -20,12 +16,12 @@ if (document.getElementById('auth-form')) {
 
         try {
             // 1. Tenter de se connecter
-            let { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+            let { data, error } = await supabase.auth.signInWithPassword({ email, password });
             
             if (error) {
                 // Si erreur de login (ex: compte inexistant), on tente l'inscription automatiquement
                 if (error.message.includes('Invalid login credentials')) {
-                     const { data: signUpData, error: signUpError } = await window.supabaseClient.auth.signUp({ 
+                     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ 
                          email, 
                          password 
                      });
@@ -66,13 +62,11 @@ if (document.getElementById('auth-form')) {
             btn.disabled = false;
         }
     });
-
-    // Redirection si déjà connecté
-    if (window.supabaseClient && SUPABASE_URL !== 'https://VOTRE_PROJET.supabase.co') {
-        window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-                window.location.href = 'dashboard.html';
-            }
-        });
-    }
 }
+
+// Redirection si déjà connecté
+supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session && (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/'))) {
+        window.location.href = 'dashboard.html';
+    }
+});

@@ -1,3 +1,5 @@
+import { supabase, checkAuth } from './app.js';
+
 let session;
 let medications = [];
 
@@ -18,8 +20,7 @@ let settings = {
 };
 
 async function loadSettings() {
-    if (!window.supabaseClient) return;
-    const { data, error } = await window.supabaseClient
+    const { data, error } = await supabase
         .from('ordonnance_settings')
         .select('*')
         .eq('user_id', session.user.id)
@@ -38,8 +39,9 @@ async function loadSettings() {
     }
 }
 
-if (document.getElementById('save-settings-btn')) {
-    document.getElementById('save-settings-btn').addEventListener('click', async () => {
+const saveSettingsBtn = document.getElementById('save-settings-btn');
+if (saveSettingsBtn) {
+    saveSettingsBtn.addEventListener('click', async () => {
         settings.date_position_y = parseFloat(document.getElementById('set-date-y').value);
         settings.patient_position_y = parseFloat(document.getElementById('set-patient-y').value);
         settings.apci_position_y = parseFloat(document.getElementById('set-apci-y').value);
@@ -47,17 +49,15 @@ if (document.getElementById('save-settings-btn')) {
         
         updatePreview();
 
-        if (window.supabaseClient) {
-            const { error } = await window.supabaseClient
-                .from('ordonnance_settings')
-                .upsert({
-                    user_id: session.user.id,
-                    ...settings,
-                    updated_at: new Date()
-                }, { onConflict: 'user_id' });
-                
-            if (!error) alert('Réglages enregistrés !');
-        }
+        const { error } = await supabase
+            .from('ordonnance_settings')
+            .upsert({
+                user_id: session.user.id,
+                ...settings,
+                updated_at: new Date()
+            }, { onConflict: 'user_id' });
+            
+        if (!error) alert('Réglages enregistrés !');
     });
 }
 
@@ -95,8 +95,9 @@ function updatePreview() {
 });
 
 // Add Medication
-if (document.getElementById('add-med-btn')) {
-    document.getElementById('add-med-btn').addEventListener('click', () => {
+const addMedBtn = document.getElementById('add-med-btn');
+if (addMedBtn) {
+    addMedBtn.addEventListener('click', () => {
         const name = document.getElementById('med-name').value;
         const poso = document.getElementById('med-posologie').value;
         if (!name) return;
@@ -116,19 +117,15 @@ if (document.getElementById('add-med-btn')) {
 }
 
 // Save and Print
-if (document.getElementById('save-print-btn')) {
-    document.getElementById('save-print-btn').addEventListener('click', async () => {
+const savePrintBtn = document.getElementById('save-print-btn');
+if (savePrintBtn) {
+    savePrintBtn.addEventListener('click', async () => {
         const patientName = document.getElementById('patient-name').value;
         if (!patientName) return alert('Nom du patient requis.');
 
-        if (!window.supabaseClient) {
-            window.print();
-            return;
-        }
-
         // 1. Chercher si le patient existe (non supprimé)
         let patientId;
-        const { data: existingPatients } = await window.supabaseClient
+        const { data: existingPatients } = await supabase
             .from('patients')
             .select('id')
             .eq('user_id', session.user.id)
@@ -140,7 +137,7 @@ if (document.getElementById('save-print-btn')) {
             patientId = existingPatients[0].id;
         } else {
             // Sinon le créer
-            const { data: newPatient } = await window.supabaseClient
+            const { data: newPatient } = await supabase
                 .from('patients')
                 .insert({ user_id: session.user.id, patient_name: patientName, is_deleted: false })
                 .select()
@@ -149,7 +146,7 @@ if (document.getElementById('save-print-btn')) {
         }
 
         // 2. Créer l'Ordonnance
-        const { data: ordoData } = await window.supabaseClient
+        const { data: ordoData } = await supabase
             .from('ordonnances')
             .insert({
                 user_id: session.user.id,
@@ -168,7 +165,7 @@ if (document.getElementById('save-print-btn')) {
                 posologie: m.posologie,
                 is_deleted: false
             }));
-            await window.supabaseClient.from('ordonnance_items').insert(itemsToInsert);
+            await supabase.from('ordonnance_items').insert(itemsToInsert);
         }
 
         // Lancer l'impression
